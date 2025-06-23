@@ -1,180 +1,169 @@
-# 📖 Manual Básico de Instalação e Execução
-
-**Sistema de Gestão de Cursos e Alunos (SGCA) - JavaFX + MySQL**
+# 📄 Manual de Execução – Sistema de Gestão de Cursos e Alunos - (SGCA)
 
 ---
 
-## ✅ Requisitos do Sistema
+## ✅ Requisitos Mínimos:
 
-* **Java JDK 17 ou superior**
-* **JavaFX SDK (exemplo: JavaFX 21)**
-* **MySQL Server** instalado e em execução
-* **IDE recomendada:** IntelliJ IDEA ou Eclipse
-* **Driver JDBC MySQL:** `mysql-connector-java`
+* **Java JDK**: Versão 8 ou superior
+* **MySQL Server**: Versão 5.x ou 8.x
+* **Driver JDBC MySQL (mysql-connector-java)**: Adicionado ao projeto (biblioteca externa)
+* **IDE recomendada (opcional)**: IntelliJ IDEA, NetBeans ou Eclipse
+* **Arquivo de estilo (CSS)**: Localizado na pasta `/gui/style.css`
 
 ---
 
-## ✅ Passo 1: Instalar e Configurar o MySQL
+## ⚙️ Preparação do Banco de Dados (MySQL):
 
-1. **Instale o MySQL Server** (caso ainda não tenha).
-   Exemplo de usuário padrão:
-
-   * Usuário: `root`
-   * Senha: *(defina a sua senha)*
-
-2. **Abra o MySQL Workbench ou outro cliente MySQL**.
-
-3. **Execute o script de criação do banco de dados:**
+1. **Crie o banco de dados**:
 
 ```sql
--- Criação do Banco
-CREATE DATABASE IF NOT EXISTS GestaoCursosAlunos;
-USE GestaoCursosAlunos;
+CREATE DATABASE gestao_cursos;
+```
 
--- Tabela Curso
+2. **Utilize o banco criado**:
+
+```sql
+USE gestao_cursos;
+```
+
+3. **Crie as tabelas necessárias**:
+
+```sql
 CREATE TABLE curso (
     idCurso INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     cargaHoraria INT NOT NULL,
     limiteAlunos INT NOT NULL,
-    ativo BOOLEAN DEFAULT TRUE,
-    CONSTRAINT chk_nome_curso CHECK (LENGTH(nome) >= 3),
-    CONSTRAINT chk_carga_horaria CHECK (cargaHoraria >= 20),
-    CONSTRAINT chk_limite_alunos CHECK (limiteAlunos >= 1)
+    ativo TINYINT NOT NULL
 );
 
--- Tabela Aluno
 CREATE TABLE aluno (
     idAluno INT AUTO_INCREMENT PRIMARY KEY,
-    cpf VARCHAR(11) UNIQUE NOT NULL,
     nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
     telefone VARCHAR(20),
     email VARCHAR(100) NOT NULL,
     dataNascimento DATE NOT NULL,
-    curso INT NOT NULL,
-    ativo BOOLEAN DEFAULT TRUE,
-    CONSTRAINT chk_nome_aluno CHECK (LENGTH(nome) >= 3),
-    CONSTRAINT chk_cpf CHECK (LENGTH(cpf) = 11),
-    CONSTRAINT chk_email CHECK (email REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
-    CONSTRAINT fk_aluno_curso FOREIGN KEY (curso) REFERENCES curso(idCurso) ON DELETE CASCADE
+    ativo TINYINT NOT NULL,
+    idCurso INT,
+    FOREIGN KEY (idCurso) REFERENCES curso(idCurso) ON DELETE CASCADE
 );
+```
 
--- Inserção de Cursos Exemplo
-INSERT INTO curso (nome, cargaHoraria, limiteAlunos) VALUES 
-('Análise e Desenvolvimento de Sistemas', 2400, 30),
-('Engenharia de Software', 2000, 25),
-('Ciências de Dados', 2000, 25),
-('Redes de Computadores', 2400, 20),
-('Ciência da Computação', 3200, 20);
+4. **Configuração da conexão com o banco**:
+   No arquivo da factory de conexão (`factory/Conexao.java`), configure o seguinte:
+
+```java
+private static final String URL = "jdbc:mysql://localhost:3306/gestao_cursos";
+private static final String USUARIO = "root";
+private static final String SENHA = "SUA_SENHA";
+```
+
+> Substitua `"SUA_SENHA"` pela sua senha real do MySQL.
+
+---
+
+## 🖥️ Execução do Sistema:
+
+### Caso esteja usando uma IDE (Eclipse, IntelliJ, NetBeans):
+
+1. Abra o projeto na IDE.
+2. Certifique-se de que o driver `mysql-connector-java.jar` está incluído no Build Path ou nas Dependências.
+3. Execute a classe principal (`Main.java` ou o menu principal do sistema).
+
+---
+
+### Caso tenha um JAR executável:
+
+1. Navegue até a pasta onde está o arquivo `.jar`.
+2. Execute pelo terminal/cmd:
+
+```bash
+java -jar SistemaGestaoCursosAlunos.jar
 ```
 
 ---
 
-## ✅ Passo 2: Configurar o Projeto JavaFX
+## 🎨 Aparência da Interface:
 
-### Estrutura de Pastas Recomendada:
+* As telas possuem layout em **VBox** e **HBox**, organizadas de forma amigável.
+* Os botões, campos de texto, tabelas e mensagens estão com estilos definidos em **CSS** (local: `/gui/style.css`).
+
+> **Se o CSS não carregar:**
+> Verifique se o caminho dentro das GUIs está assim:
+
+```java
+scene.getStylesheets().add(getClass().getResource("/gui/style.css").toExternalForm());
+```
+
+---
+
+## 📋 Funcionalidades Disponíveis:
+
+### ✅ Módulo Curso:
+
+* Cadastrar novo curso
+* Editar curso
+* Excluir curso (exclui também os alunos vinculados)
+* Desabilitar curso
+* Reabilitar curso
+* Listar cursos ativos e inativos
+* Controlar o limite máximo de alunos
+
+### ✅ Módulo Aluno:
+
+* Cadastrar novo aluno
+* Editar aluno
+* Excluir aluno
+* Desabilitar aluno
+* Reabilitar aluno
+* Listar alunos ativos e inativos
+* Validação de CPF, email e idade mínima de 16 anos
+
+### ✅ Relatórios:
+
+* Listar alunos de um curso específico
+* Listar todos os cursos com seus respectivos alunos
+* Exportar relatórios de alunos ativos por curso (arquivo `.txt`)
+* Exportar relatórios de alunos inativos por curso (arquivo `.txt`)
+
+---
+
+## 💾 Exportação de Relatórios:
+
+1. Ao clicar em **Exportar**, o sistema abrirá um diálogo para o usuário escolher o local e o nome do arquivo `.txt`.
+2. Os arquivos serão salvos contendo o nome do curso e a lista de alunos vinculados, com nome e CPF.
+
+---
+
+## ❗ Possíveis Erros Comuns:
+
+| Problema                  | Causa                                 | Solução                                                                                                |
+| ------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Erro de conexão com MySQL | Configuração errada na `Conexao.java` | Verifique URL, usuário e senha                                                                         |
+| Tabela não encontrada     | Banco/tabelas ainda não criados       | Execute os scripts SQL informados                                                                      |
+| CSS não aplicado          | Caminho incorreto do CSS              | Confirme se o arquivo `style.css` está na pasta `/gui` e que o `.jar` ou projeto IDE está reconhecendo |
+
+---
+
+## 📂 Estrutura de Pastas (Exemplo):
 
 ```
 src/
-├─ dao/
-├─ factory/
-├─ modelo/
-├─ gui/
-├─ css/
+├── dao/
+├── factory/
+├── gui/
+├── modelo/
+├── Main.java
+├── gui/style.css
 ```
-
-### Bibliotecas necessárias:
-
-* Adicione o **JavaFX SDK** no módulo do seu projeto (Module Path).
-* Adicione o **mysql-connector-java.jar** na pasta `/lib` e configure no build path.
 
 ---
 
-## ✅ Passo 3: Configuração da Conexão com o Banco (Classe `Conexao.java`)
+## ✅ Finalização:
 
-Verifique o conteúdo da sua classe `Conexao.java` para garantir que está com URL, usuário e senha corretos:
-
-```java
-package factory;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-public class Conexao {
-    private static final String URL = "jdbc:mysql://localhost:3306/GestaoCursosAlunos";
-    private static final String USUARIO = "root";
-    private static final String SENHA = "sua_senha_aqui";
-
-    public static Connection conectar() throws SQLException {
-        return DriverManager.getConnection(URL, USUARIO, SENHA);
-    }
-}
-```
-
-👉 **Troque `"sua_senha_aqui"` pela senha real do seu MySQL.**
+O sistema está pronto para uso, seguindo todas as regras de negócio e validações exigidas pela professora.
 
 ---
 
-## ✅ Passo 4: Ajustar o VM Options da IDE
-
-Se estiver usando **IntelliJ** ou **Eclipse**, adicione as seguintes opções no **Run Configuration (VM Options):**
-
-```
---module-path "C:\caminho\para\javafx-sdk-21\lib" --add-modules javafx.controls,javafx.fxml
-```
-
-👉 Troque o caminho conforme a pasta do seu JavaFX.
-
----
-
-## ✅ Passo 5: Executar o Sistema
-
-* **Classe Main:** Você deve ter uma classe principal chamada algo como:
-
-```java
-public class Main extends Application {
-    @Override
-    public void start(Stage primaryStage) {
-        new AlunoGUI().show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-}
-```
-
-👉 Você pode trocar o GUI inicial, por exemplo:
-`new CursoGUI().show();` para abrir a tela de cursos.
-
----
-
-## ✅ Passo 6: Navegação e Uso Básico
-
-### Tela de Alunos:
-
-* Cadastrar Aluno
-* Editar Aluno
-* Excluir Aluno
-* Desabilitar/Reabilitar
-* Visualização de alunos ativos
-
-### Tela de Cursos:
-
-* Cadastrar Curso
-* Visualizar lista de cursos ativos
-
-*(prints das telas também)*
-
----
-
-## ✅ Possíveis Erros Comuns
-
-| Erro                               | Causa Possível                                 | Solução                                         |
-| ---------------------------------- | ---------------------------------------------- | ----------------------------------------------- |
-| `CSS não encontrado`               | Caminho errado no `scene.getStylesheets()`     | Verifique a pasta `/css/` e o nome do arquivo   |
-| `Cannot connect to MySQL`          | Banco MySQL não iniciado ou senha errada       | Verifique URL, usuário e senha                  |
-| `Module javafx.controls not found` | JavaFX não configurado corretamente no projeto | Ajuste o VM Options com o caminho do JavaFX SDK |
-
-
+Se quiser eu posso te gerar o arquivo `.docx` ou `.pdf` deste manual. Quer?

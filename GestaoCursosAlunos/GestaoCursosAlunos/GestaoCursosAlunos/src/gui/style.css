@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+
+/* Fundo geral */
+.root {
+    -fx-background-color: #0D0D0D; /* Preto fosco */
+}
+
+/* Containers */
+VBox, HBox {
+    -fx-background-color: #111111;
+    -fx-padding: 20;
+    -fx-background-radius: 6;
+    -fx-spacing: 10;
+    -fx-alignment: center; /* Alinha os filhos ao centro */
+    -fx-pref-width: 100%;  /* Garante que o container ocupe 100% da largura */
+    -fx-pref-height: 100%; /* Garante que o container ocupe 100% da altura */
+}
+
+/* Titulo */
+.titulo {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 34px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #C0C0C0;
+    -fx-text-alignment: center;
+}
+
+
+/* Campos do formulário */
+.text-field, .combo-box, .date-picker {
+    -fx-background-color: #1A1A1A;
+    -fx-text-fill: #66FF99; /* Texto em verde claro */
+    -fx-prompt-text-fill: #44DD77; /* Texto de prompt em verde suave */
+    -fx-font-family: 'Share Tech Mono', monospace;
+    -fx-font-size: 13px;
+    -fx-border-color: #44DD77;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+/* Texto dentro do ComboBox */
+.combo-box .editable-text {
+    -fx-text-fill: #66FF99; /* Cor do texto dentro do combo */
+}
+
+/* Menos sombra no foco */
+.text-field:focused, .combo-box:focused, .date-picker:focused {
+    -fx-border-color: #66FF99; /* Cor do contorno em verde claro ao focar */
+}
+
+/* Diminuir opacidade do texto de prompt nos campos */
+.text-field .text, .combo-box .text, .date-picker .text {
+    -fx-opacity: 0.6; /* Texto do prompt mais desbotado */
+}
+
+/* Foco nos campos de formulário */
+.text-field:focused .text, .combo-box:focused .text, .date-picker:focused .text {
+    -fx-opacity: 1; /* Texto normal ao focar no campo */
+}
+
+/* Botões */
+.botao {
+    -fx-font-family: 'Share Tech Mono', monospace;
+    -fx-font-size: 13px;
+    -fx-background-color: #222;
+    -fx-text-fill: #66FF99;
+    -fx-border-color: #44DD77;
+    -fx-border-width: 1;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+}
+
+.botao:hover {
+    -fx-background-color: #33AA66;
+    -fx-text-fill: black;
+}
+
+.botao-relatorio {
+    -fx-font-family: 'Share Tech Mono', monospace;
+    -fx-font-size: 10px;
+    -fx-background-color: #222;
+    -fx-text-fill: #66FF99;
+    -fx-border-color: #44DD77;
+    -fx-border-width: 1;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+}
+
+.botao-relatorio:hover {
+    -fx-background-color: #33AA66;
+    -fx-text-fill: black;
+}
+
+
+/* Tabela */
+.table-view {
+    -fx-background-color: #1A1A1A;
+    -fx-border-color: #444;
+    -fx-font-family: 'Share Tech Mono', monospace;
+    -fx-text-fill: #66FF99;
+    -fx-font-size: 14px;
+}
+
+/* Estilizando a barra de rolagem da Tabela */
+.table-view .scroll-bar:vertical, .table-view .scroll-bar:horizontal {
+    -fx-background-color: #222; /* Cor de fundo da barra de rolagem */
+    -fx-background-radius: 6;
+}
+
+.table-view .scroll-bar .thumb {
+    -fx-background-color: #44DD77; /* Cor do thumb (parte deslizante da barra) */
+    -fx-background-radius: 6;
+}
+
+/* Colunas da Tabela */
+.table-view .column-header-background {
+    -fx-background-color: #111; /* Fundo escuro para cabeçalhos */
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: #111; /* Fundo escuro para cabeçalhos */
+    -fx-border-color: #D3ECCD;
+    -fx-border-width: 0 0 1 0;
+    -fx-text-fill: #66FF99; /* Cor do texto do cabeçalho */
+}
+
+/* Linhas da Tabela */
+.table-view .table-row-cell {
+    -fx-background-color: #1A1A1A; /* Fundo escuro para as células */
+    -fx-text-fill: #66FF99; /* Texto verde claro */
+    -fx-border-color: #D3ECCD; /* Cor da borda */
+    -fx-border-width: 0 0 1 0; /* Borda inferior para separação */
+}
+
+/* Linha Selecionada na Tabela */
+.table-view .table-row-cell:selected {
+    -fx-background-color: #33AA66; /* Verde suave para linha selecionada */
+    -fx-text-fill: #111; /* Texto escuro para melhor contraste na seleção */
+}
+
+/* Hover sobre as Linhas */
+.table-view .table-row-cell:hover {
+    -fx-background-color: #33AA66;  /* Fundo mais claro ao passar o mouse */
+    -fx-text-fill: #66FF99;  /* Cor do texto continua visível */
+}
+
+/* Linhas não selecionadas e não em hover, para garantir visibilidade */
+.table-view .table-row-cell:empty {
+    -fx-background-color: #333333; /* Fundo um pouco mais claro */
+    -fx-text-fill: #66FF99; /* Texto verde claro */
+}
+
+/* Scroll da Tabela */
+.table-view .scroll-bar:vertical, .table-view .scroll-bar:horizontal {
+    -fx-background-color: #222; /* Cor de fundo da barra de rolagem */
+    -fx-background-radius: 6;
+}
+
+.table-view .scroll-bar .thumb {
+    -fx-background-color: #44DD77; /* Cor do thumb (parte deslizante da barra) */
+    -fx-background-radius: 6;
+}
+
+/* Mensagens */
+.label {
+    -fx-text-fill: #66FF99;
+    -fx-font-family: 'Share Tech Mono', monospace;
+    -fx-font-size: 12px;
+}
+
+/* Ajuste de cor do ComboBox para as células */
+.combo-box .list-cell {
+    -fx-text-fill: #66FF99; /* Texto do ComboBox visível */
+}
+
+/* Cores de fundo das opções do ComboBox */
+.combo-box .list-cell:hover {
+    -fx-background-color: #111; /* Fundo mais claro ao passar o mouse */
+    -fx-text-fill: #66FF99; /* Texto em verde claro */
+}
+
+/* Foco do ComboBox */
+.combo-box:focused .list-cell {
+    -fx-background-color: #111; /* Foco em verde */
+    -fx-text-fill: #33AA66; /* Texto escuro quando em foco */
+}
+
+/* Item selecionado no ComboBox */
+.combo-box .list-cell:focused {
+    -fx-background-color: #444444; /* Cor de fundo ao selecionar item */
+    -fx-text-fill: #66FF99; /* Texto em verde claro */
+}
